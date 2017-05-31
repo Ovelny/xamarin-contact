@@ -1,6 +1,9 @@
 
 .vs/*
 xamarinContact/obj/*
+xamarinContact/bin/*
+xamarinContact/xamarinContact.csproj.user
+
 
 packages/*
 App_Data
