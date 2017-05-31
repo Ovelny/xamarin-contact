@@ -9,111 +9,69 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using xamarinContact.Data;
+using xamarinContact.Exceptions;
 using xamarinContact.Models;
+using xamarinContact.Services;
 
 namespace xamarinContact.Controllers
 {
     public class ContactsController : ApiController
     {
-        private xamarinContactContext db = new xamarinContactContext();
+        private ContactsStore store;
+
+        public ContactsController()
+        {
+            this.store = new ContactsStore();
+        }
 
         // GET: api/Contacts
-        public IQueryable<Contact> GetContacts()
+        public List<Contact> GetContacts()
         {
-            return db.Contacts;
+            return this.store.AllContacts();
         }
 
         // GET: api/Contacts/5
-        [ResponseType(typeof(Contact))]
-        public async Task<IHttpActionResult> GetContact(int id)
+        public Contact GetContact(int id)
         {
-            Contact contact = await db.Contacts.FindAsync(id);
+            var contact = this.store.ContactById(id);
             if (contact == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(contact);
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            return contact;
         }
 
         // PUT: api/Contacts/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutContact(int id, Contact contact)
+        [HttpPut]
+        public Contact Update(int id, Contact contact)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != contact.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(contact).State = EntityState.Modified;
-
             try
             {
-                await db.SaveChangesAsync();
+                return this.store.Update(id, contact);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ContactNotFoundException e)
             {
-                if (!ContactExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Contacts
-        [ResponseType(typeof(Contact))]
-        public async Task<IHttpActionResult> PostContact(Contact contact)
+        [HttpPost]
+        public Contact Create(Contact contact)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Contacts.Add(contact);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = contact.Id }, contact);
+            return this.store.Create(contact);
         }
 
         // DELETE: api/Contacts/5
-        [ResponseType(typeof(Contact))]
-        public async Task<IHttpActionResult> DeleteContact(int id)
+        public void Delete(int id)
         {
-            Contact contact = await db.Contacts.FindAsync(id);
-            if (contact == null)
+            try
             {
-                return NotFound();
+                this.store.Delete(id);
             }
-
-            db.Contacts.Remove(contact);
-            await db.SaveChangesAsync();
-
-            return Ok(contact);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            catch (ContactNotFoundException e)
             {
-                db.Dispose();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-            base.Dispose(disposing);
-        }
-
-        private bool ContactExists(int id)
-        {
-            return db.Contacts.Count(e => e.Id == id) > 0;
         }
     }
 }
