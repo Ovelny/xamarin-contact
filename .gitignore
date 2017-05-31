@@ -1,3 +1,6 @@
+
+.vs/*
+xamarinContact/obj/*
+
 packages/*
 App_Data
-.vs/*
