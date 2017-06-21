@@ -7,9 +7,9 @@ using Xamarin.Forms;
 
 namespace ContactApp
 {
-    public partial class MainPage : ContentPage
+    public partial class ContactList : ContentPage
     {
-        public MainPage()
+        public ContactList()
         {
             InitializeComponent();
         }

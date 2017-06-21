@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ContactApp"
+             x:Class="ContactApp.ContactList">
+    
+    <StackLayout Orientation="Vertical" x:Name="ContactListLayout">
+        <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                <Label Text="Michel Durand" VerticalOptions="Fill"></Label>
+                <Label Text="06 12 34 56 78" VerticalOptions="Fill"></Label>
+            </StackLayout>
+            <Button Text="SMS" HorizontalOptions="Fill"></Button>
+            <Button Text="TEL" HorizontalOptions="Fill"></Button>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                <Label Text="Michelle Dupont" VerticalOptions="Fill"></Label>
+                <Label Text="06 12 34 56 78" VerticalOptions="Fill"></Label>
+            </StackLayout>
+            <Button Text="SMS" HorizontalOptions="Fill"></Button>
+            <Button Text="TEL" HorizontalOptions="Fill"></Button>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                <Label Text="Bertrand Gérard" VerticalOptions="Fill"></Label>
+                <Label Text="06 12 34 56 78" VerticalOptions="Fill"></Label>
+            </StackLayout>
+            <Button Text="SMS" HorizontalOptions="Fill"></Button>
+            <Button Text="TEL" HorizontalOptions="Fill"></Button>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

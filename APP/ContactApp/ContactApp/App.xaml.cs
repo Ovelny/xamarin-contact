@@ -13,7 +13,7 @@ namespace ContactApp
         {
             InitializeComponent();
 
-            MainPage = new ContactApp.MainPage();
+            MainPage = new ContactApp.ContactList();
         }
 
         protected override void OnStart()
