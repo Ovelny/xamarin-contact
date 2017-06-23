@@ -1,10 +1,12 @@
 ﻿using ContactApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 
 namespace ContactApp
 {
@@ -45,10 +47,11 @@ namespace ContactApp
             elem.Children.Add(new Label { Text = contact.PhoneNumber, VerticalOptions = LayoutOptions.Fill });
             contactElement.Children.Add(elem);
 
-            var button = new Button { Text = "SMS", HorizontalOptions = LayoutOptions.Fill };
-            contactElement.Children.Add(button);
-            button = new Button { Text = "TEL", HorizontalOptions = LayoutOptions.Fill };
-            contactElement.Children.Add(button);
+            var buttonSMS = new Button { Text = "SMS", HorizontalOptions = LayoutOptions.Fill };
+            buttonSMS.Clicked += SMS_Clicked(contact.PhoneNumber);
+            contactElement.Children.Add(buttonSMS);
+            var buttonTel = new Button { Text = "TEL", HorizontalOptions = LayoutOptions.Fill};
+            contactElement.Children.Add(buttonTel);
 
             var panGesture = new PanGestureRecognizer();
             panGesture.PanUpdated += OnPanUpdated;
@@ -91,6 +94,13 @@ namespace ContactApp
                 await sender.TranslateTo(-sender.X, 0);
                 SwipeDistance = 0;
             }
+        }
+
+        private EventHandler SMS_Clicked(string PhoneNumber)
+        {
+            var SMS = DependencyService.Get<ICellPhone>();
+            SMS.openSMS(PhoneNumber);
+            return null;
         }
     }
 }
