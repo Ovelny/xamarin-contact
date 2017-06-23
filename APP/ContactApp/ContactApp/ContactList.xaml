@@ -5,6 +5,7 @@
              x:Class="ContactApp.ContactList">
     
     <StackLayout Orientation="Vertical" x:Name="ContactListLayout">
+    <!--
         <StackLayout Orientation="Horizontal">
             <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
                 <Label Text="Michel Durand" VerticalOptions="Fill"></Label>
@@ -29,5 +30,6 @@
             <Button Text="SMS" HorizontalOptions="Fill"></Button>
             <Button Text="TEL" HorizontalOptions="Fill"></Button>
         </StackLayout>
+        -->
     </StackLayout>
 </ContentPage>
