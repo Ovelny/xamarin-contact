@@ -1,4 +1,5 @@
-﻿using ContactApp.Models;
+﻿using ContactApp.DataHandlers;
+using ContactApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,32 +13,18 @@ namespace ContactApp.Pages
 {
     public partial class ContactList : ContentPage
     {
-        float SwipeDistance = 0;
-        float ReferenceSwipeDistance = 50;
+        private float SwipeDistance = 0;
+        private float ReferenceSwipeDistance = 50;
+
+        private IRepository repositoryContact;
 
         public ContactList()
         {
             InitializeComponent();
 
-            var list = new List<Contact>
-            {
-                new Contact
-                {
-                    FirstName = "Michel",
-                    LastName = "Durand",
-                    PhoneNumber = "06 12 34 56 78"
-                },new Contact
-                {
-                    FirstName = "Martine",
-                    LastName = "Dupond",
-                    PhoneNumber = "06 12 34 56 78"
-                },new Contact
-                {
-                    FirstName = "Rémi",
-                    LastName = "Sansfamille",
-                    PhoneNumber = "06 12 34 56 78"
-                }
-            };
+            this.repositoryContact = new ContactRedoLog();
+
+            var list = repositoryContact.getAllContacts();
 
             foreach(Contact contact in list)
                 this.ContactListLayout.Children.Add(CreateContactElement(contact));
@@ -109,21 +96,20 @@ namespace ContactApp.Pages
                 else
                 {
                     SwipedLeft(sender).ContinueWith(
-                        async (a) =>
-                        {
-                            // Remettre l'émélent à sa place initiale après l'action.
-                            await sender.TranslateTo(-sender.X, 0);
-                            SwipeDistance = 0;
-                        }
+                        (a) => ResetElementPosition(sender)
                         );
                 }
             }
             else
             {
-                // remettre l'élément à sa position initiale
-                await sender.TranslateTo(-sender.X, 0);
-                SwipeDistance = 0;
+                ResetElementPosition(sender);
             }
+        }
+
+        private async void ResetElementPosition(View element)
+        {
+            await element.TranslateTo(-element.X, 0);
+            SwipeDistance = 0;
         }
 
         private void SwipedRight(View sender)
