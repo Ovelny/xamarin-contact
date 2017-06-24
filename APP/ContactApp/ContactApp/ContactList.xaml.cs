@@ -13,7 +13,7 @@ namespace ContactApp
     public partial class ContactList : ContentPage
     {
         float SwipeDistance = 0;
-        float ReferenceSwipeDistance = 30;
+        float ReferenceSwipeDistance = 50;
 
         public ContactList()
         {
@@ -39,16 +39,16 @@ namespace ContactApp
             }));
         }
 
-        protected View CreateContactElement(Contact contact)
+        private View CreateContactElement(Contact contact)
         {
             var contactElement = new StackLayout { Orientation = StackOrientation.Horizontal };
-            var elem = new StackLayout { Orientation = StackOrientation.Vertical };
+            var elem = new StackLayout { Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.FillAndExpand };
             elem.Children.Add(new Label { Text = contact.FirstName + " " + contact.LastName, VerticalOptions = LayoutOptions.Fill });
             elem.Children.Add(new Label { Text = contact.PhoneNumber, VerticalOptions = LayoutOptions.Fill });
             contactElement.Children.Add(elem);
 
             var buttonSMS = new Button { Text = "SMS", HorizontalOptions = LayoutOptions.Fill };
-            buttonSMS.Clicked += SMS_Clicked(contact.PhoneNumber);
+            buttonSMS.Clicked += GetSMSEventHandler(contact.PhoneNumber);
             contactElement.Children.Add(buttonSMS);
             var buttonTel = new Button { Text = "TEL", HorizontalOptions = LayoutOptions.Fill};
             contactElement.Children.Add(buttonTel);
@@ -60,7 +60,7 @@ namespace ContactApp
             return contactElement;
         }
 
-        void OnPanUpdated(object sender, PanUpdatedEventArgs e)
+        private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
             switch (e.StatusType)
             {
@@ -76,19 +76,28 @@ namespace ContactApp
             }
         }
 
-        async void HandleTouch(View sender, float diff_x)
+        private async void HandleTouch(View sender, float diff_x)
         {
             await sender.TranslateTo(diff_x, 0);
             SwipeDistance = diff_x;
         }
 
-        async void HandleTouchEnd(View sender)
+        private async void HandleTouchEnd(View sender)
         {
-            //if(Math.Abs(SwipeDistance) > ReferenceSwipeDistance)
-            //{
-            //  // envoyer l'élément hors du champ
-            //}
-            //else
+            if (Math.Abs(SwipeDistance) > ReferenceSwipeDistance)
+            {
+                // envoyer l'élément hors du champ
+                await sender.TranslateTo(SwipeDistance > 0 ? this.Width : -this.Width, 0);
+                if (SwipeDistance > 0)
+                {
+                    SwipedRight(sender);
+                }
+                else
+                {
+                    SwipedLeft(sender);
+                }
+            }
+            else
             {
                 // remettre l'élément à sa position initiale
                 await sender.TranslateTo(-sender.X, 0);
@@ -96,11 +105,27 @@ namespace ContactApp
             }
         }
 
-        private EventHandler SMS_Clicked(string PhoneNumber)
+        private void SwipedRight(View sender)
         {
-            var SMS = DependencyService.Get<ICellPhone>();
-            SMS.openSMS(PhoneNumber);
-            return null;
+
+        }
+
+        private void SwipedLeft(View sender)
+        {
+
+        }
+        
+        private EventHandler GetSMSEventHandler(string PhoneNumber)
+        {
+            // les EventHandler doivent avoir pour paramètres (object sender, EventArgs e)
+            // ici on renvoie une fonction de type EventHandler, qui appellera SMS_Clicked avec 
+            // le bon paramètre PhoneNumber
+            return (sender, e) => SMS_Clicked(PhoneNumber);
+        }
+
+        private void SMS_Clicked(string PhoneNumber)
+        {
+            DependencyService.Get<ICellPhone>().openSMS(PhoneNumber);
         }
     }
 }

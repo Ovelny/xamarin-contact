@@ -10,7 +10,9 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Xamarin.Forms;
+using ContactApp.Droid;
 
+[assembly: Xamarin.Forms.Dependency(typeof(CellPhone))]
 namespace ContactApp.Droid
 {
     public class CellPhone : ICellPhone
