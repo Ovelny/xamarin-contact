@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 
-namespace ContactApp
+namespace ContactApp.Pages
 {
     public partial class ContactList : ContentPage
     {
@@ -19,45 +19,59 @@ namespace ContactApp
         {
             InitializeComponent();
 
-            this.ContactListLayout.Children.Add(CreateContactElement(new Contact
+            var list = new List<Contact>
             {
-                FirstName = "Michel",
-                LastName = "Durand",
-                PhoneNumber = "06 12 34 56 78"
-            }));
-            this.ContactListLayout.Children.Add(CreateContactElement(new Contact
-            {
-                FirstName = "Martine",
-                LastName = "Dupond",
-                PhoneNumber = "06 12 34 56 78"
-            }));
-            this.ContactListLayout.Children.Add(CreateContactElement(new Contact
-            {
-                FirstName = "Rémi",
-                LastName = "Sansfamille",
-                PhoneNumber = "06 12 34 56 78"
-            }));
+                new Contact
+                {
+                    FirstName = "Michel",
+                    LastName = "Durand",
+                    PhoneNumber = "06 12 34 56 78"
+                },new Contact
+                {
+                    FirstName = "Martine",
+                    LastName = "Dupond",
+                    PhoneNumber = "06 12 34 56 78"
+                },new Contact
+                {
+                    FirstName = "Rémi",
+                    LastName = "Sansfamille",
+                    PhoneNumber = "06 12 34 56 78"
+                }
+            };
+
+            foreach(Contact contact in list)
+                this.ContactListLayout.Children.Add(CreateContactElement(contact));
         }
 
         private View CreateContactElement(Contact contact)
         {
-            var contactElement = new StackLayout { Orientation = StackOrientation.Horizontal };
-            var elem = new StackLayout { Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.FillAndExpand };
-            elem.Children.Add(new Label { Text = contact.FirstName + " " + contact.LastName, VerticalOptions = LayoutOptions.Fill });
-            elem.Children.Add(new Label { Text = contact.PhoneNumber, VerticalOptions = LayoutOptions.Fill });
-            contactElement.Children.Add(elem);
+            var contactDisplayElement = new StackLayout { Orientation = StackOrientation.Horizontal };
 
             var buttonSMS = new Button { Text = "SMS", HorizontalOptions = LayoutOptions.Fill };
             buttonSMS.Clicked += GetSMSEventHandler(contact.PhoneNumber);
-            contactElement.Children.Add(buttonSMS);
+            contactDisplayElement.Children.Add(buttonSMS);
+
+            var elem = new StackLayout { Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.FillAndExpand };
+            elem.Children.Add(new Label { Text = contact.FirstName + " " + contact.LastName, VerticalOptions = LayoutOptions.Fill });
+            elem.Children.Add(new Label { Text = contact.PhoneNumber, VerticalOptions = LayoutOptions.Fill });
+            contactDisplayElement.Children.Add(elem);
+
             var buttonTel = new Button { Text = "TEL", HorizontalOptions = LayoutOptions.Fill};
-            contactElement.Children.Add(buttonTel);
+            contactDisplayElement.Children.Add(buttonTel);
 
             var panGesture = new PanGestureRecognizer();
             panGesture.PanUpdated += OnPanUpdated;
-            contactElement.GestureRecognizers.Add(panGesture);
+            contactDisplayElement.GestureRecognizers.Add(panGesture);
 
-            return contactElement;
+            //var deleteButton = new Label { Text = "Suppr" };
+            //var modifyButton = new Label { Text = "Modif" };
+
+            //var contactElement = new AbsoluteLayout { WidthRequest=360 };
+            //contactElement.Children.Add(deleteButton, new Point(0,5));
+            //contactElement.Children.Add(modifyButton, new Point(320,5));
+            //contactElement.Children.Add(contactDisplayElement, new Point(0,0));
+
+            return contactDisplayElement;
         }
 
         private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
@@ -94,7 +108,14 @@ namespace ContactApp
                 }
                 else
                 {
-                    SwipedLeft(sender);
+                    SwipedLeft(sender).ContinueWith(
+                        async (a) =>
+                        {
+                            // Remettre l'émélent à sa place initiale après l'action.
+                            await sender.TranslateTo(-sender.X, 0);
+                            SwipeDistance = 0;
+                        }
+                        );
                 }
             }
             else
@@ -107,14 +128,15 @@ namespace ContactApp
 
         private void SwipedRight(View sender)
         {
-
+            // Action de suppression
         }
 
-        private void SwipedLeft(View sender)
+        private Task SwipedLeft(View sender)
         {
-
+            // Action de modification : renvoyer vers la page de modif
+            return this.Navigation.PushAsync(new ContactDetail());
         }
-        
+
         private EventHandler GetSMSEventHandler(string PhoneNumber)
         {
             // les EventHandler doivent avoir pour paramètres (object sender, EventArgs e)
