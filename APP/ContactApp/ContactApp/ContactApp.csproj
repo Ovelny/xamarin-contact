@@ -38,6 +38,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataHandlers\ContactFakeRepository.cs" />
+    <Compile Include="DataHandlers\ContactRedoLog.cs" />
+    <Compile Include="DataHandlers\ContactRestRepository.cs" />
+    <Compile Include="DataHandlers\IRepository.cs" />
     <Compile Include="Pages\ContactDetail.xaml.cs">
       <DependentUpon>ContactDetail.xaml</DependentUpon>
     </Compile>

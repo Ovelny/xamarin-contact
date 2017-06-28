@@ -5,8 +5,8 @@
              x:Class="ContactApp.Pages.ContactList"
              Title="Liste des contacts">
     
-    <StackLayout Orientation="Vertical" x:Name="ContactListLayout">
-    <!--
+    <!--<StackLayout Orientation="Vertical" >
+    --><!--
         <StackLayout Orientation="Horizontal">
             <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
                 <Label Text="Michel Durand" VerticalOptions="Fill"></Label>
@@ -16,5 +16,25 @@
             <Button Text="TEL" HorizontalOptions="Fill"></Button>
         </StackLayout>
         -->
-    </StackLayout>
+       
+    <!--
+    </StackLayout>-->
+    
+    <ListView x:Name="ContactsView">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Text="SMS" HorizontalOptions="Fill"></Button>
+                        <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                            <Label Text="{Binding FirstName}" VerticalOptions="Fill"></Label>
+                            <Label Text="{Binding PhoneNumber}" VerticalOptions="Fill"></Label>
+                        </StackLayout>
+                        <Button Text="TEL" HorizontalOptions="Fill"></Button>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    
 </ContentPage>
