@@ -14,6 +14,7 @@ namespace ContactApp.Pages
 {
     public partial class ContactList : ContentPage
     {
+        // T. : est-ce vraiment nécessaire de devoir gérer des variables avec un swipe normal ?
         private float SwipeDistance = 0;
         private float ReferenceSwipeDistance = 50;
 
@@ -35,6 +36,22 @@ namespace ContactApp.Pages
                 Contacts.Add(contact);
 
             //this.ContactListLayout.Children.Add(CreateContactElement(contact));
+        }
+
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            // selon le text label, appelle la méthode correspondante pour gérer appel ou sms
+        }
+
+        private void SMSClicked()
+        {
+
+        }
+
+        private void TelClicked()
+        {
+
         }
 
         //private View CreateContactElement(Contact contact)

@@ -25,12 +25,12 @@
             <DataTemplate>
                 <ViewCell>
                     <StackLayout Orientation="Horizontal">
-                        <Button Text="SMS" HorizontalOptions="Fill"></Button>
+                        <Button Text="SMS" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
                         <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
                             <Label Text="{Binding FirstName}" VerticalOptions="Fill"></Label>
                             <Label Text="{Binding PhoneNumber}" VerticalOptions="Fill"></Label>
                         </StackLayout>
-                        <Button Text="TEL" HorizontalOptions="Fill"></Button>
+                        <Button Text="TEL" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
