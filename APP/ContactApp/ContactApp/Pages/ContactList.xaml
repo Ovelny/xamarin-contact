@@ -4,32 +4,23 @@
              xmlns:local="clr-namespace:ContactApp"
              x:Class="ContactApp.Pages.ContactList"
              Title="Liste des contacts">
-    
-    <!--<StackLayout Orientation="Vertical" >
-    --><!--
-        <StackLayout Orientation="Horizontal">
-            <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
-                <Label Text="Michel Durand" VerticalOptions="Fill"></Label>
-                <Label Text="06 12 34 56 78" VerticalOptions="Fill"></Label>
-            </StackLayout>
-            <Button Text="SMS" HorizontalOptions="Fill"></Button>
-            <Button Text="TEL" HorizontalOptions="Fill"></Button>
-        </StackLayout>
-        -->
-       
-    <!--
-    </StackLayout>-->
-    
+        
     <ListView x:Name="ContactsView">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <StackLayout Orientation="Horizontal">
-                        <Button Text="SMS" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
+                    <StackLayout x:Name="ContactElement" Orientation="Horizontal">
+                        <StackLayout.GestureRecognizers>
+                            <PanGestureRecognizer PanUpdated="OnPanUpdated" />
+                        </StackLayout.GestureRecognizers>
                         <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
-                            <Label Text="{Binding FirstName}" VerticalOptions="Fill"></Label>
-                            <Label Text="{Binding PhoneNumber}" VerticalOptions="Fill"></Label>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding FirstName}"></Label>
+                                <Label Text="{Binding LastName}"></Label>
+                            </StackLayout>
+                            <Label Text="{Binding PhoneNumber}"></Label>
                         </StackLayout>
+                        <Button Text="SMS" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
                         <Button Text="TEL" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
                     </StackLayout>
                 </ViewCell>

@@ -34,10 +34,7 @@ namespace ContactApp.Pages
 
             foreach (Contact contact in list)
                 Contacts.Add(contact);
-
-            //this.ContactListLayout.Children.Add(CreateContactElement(contact));
         }
-
 
         private void Button_Clicked(object sender, EventArgs e)
         {
@@ -85,67 +82,67 @@ namespace ContactApp.Pages
         //    return contactDisplayElement;
         //}
 
-        //private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
-        //{
-        //    switch (e.StatusType)
-        //    {
-        //        case GestureStatus.Started:
-        //            //HandleTouchStart();
-        //            break;
-        //        case GestureStatus.Running:
-        //            HandleTouch((View)sender, (float)e.TotalX);
-        //            break;
-        //        case GestureStatus.Completed:
-        //            HandleTouchEnd((View)sender);
-        //            break;
-        //    }
-        //}
+        private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            switch (e.StatusType)
+            {
+                case GestureStatus.Started:
+                    //HandleTouchStart();
+                    break;
+                case GestureStatus.Running:
+                    HandleTouch((View)sender, (float)e.TotalX);
+                    break;
+                case GestureStatus.Completed:
+                    HandleTouchEnd((View)sender);
+                    break;
+            }
+        }
 
-        //private async void HandleTouch(View sender, float diff_x)
-        //{
-        //    await sender.TranslateTo(diff_x, 0);
-        //    SwipeDistance = diff_x;
-        //}
+        private async void HandleTouch(View sender, float diff_x)
+        {
+            await sender.TranslateTo(diff_x, 0);
+            SwipeDistance = diff_x;
+        }
 
-        //private async void HandleTouchEnd(View sender)
-        //{
-        //    if (Math.Abs(SwipeDistance) > ReferenceSwipeDistance)
-        //    {
-        //        // envoyer l'élément hors du champ
-        //        await sender.TranslateTo(SwipeDistance > 0 ? this.Width : -this.Width, 0);
-        //        if (SwipeDistance > 0)
-        //        {
-        //            SwipedRight(sender);
-        //        }
-        //        else
-        //        {
-        //            SwipedLeft(sender).ContinueWith(
-        //                (a) => ResetElementPosition(sender)
-        //                );
-        //        }
-        //    }
-        //    else
-        //    {
-        //        ResetElementPosition(sender);
-        //    }
-        //}
+        private async void HandleTouchEnd(View sender)
+        {
+            if (Math.Abs(SwipeDistance) > ReferenceSwipeDistance)
+            {
+                // envoyer l'élément hors du champ
+                await sender.TranslateTo(SwipeDistance > 0 ? this.Width : -this.Width, 0);
+                if (SwipeDistance > 0)
+                {
+                    SwipedRight(sender);
+                }
+                else
+                {
+                    SwipedLeft(sender).ContinueWith(
+                        (a) => ResetElementPosition(sender)
+                        );
+                }
+            }
+            else
+            {
+                ResetElementPosition(sender);
+            }
+        }
 
-        //private async void ResetElementPosition(View element)
-        //{
-        //    await element.TranslateTo(-element.X, 0);
-        //    SwipeDistance = 0;
-        //}
+        private async void ResetElementPosition(View element)
+        {
+            await element.TranslateTo(-element.X, 0);
+            SwipeDistance = 0;
+        }
 
-        //private void SwipedRight(View sender)
-        //{
-        //    // Action de suppression
-        //}
+        private void SwipedRight(View sender)
+        {
+            // Action de suppression
+        }
 
-        //private Task SwipedLeft(View sender)
-        //{
-        //    // Action de modification : renvoyer vers la page de modif
-        //    return this.Navigation.PushAsync(new ContactDetail());
-        //}
+        private Task SwipedLeft(View sender)
+        {
+            // Action de modification : renvoyer vers la page de modif
+            return this.Navigation.PushAsync(new ContactDetail());
+        }
 
         //private EventHandler GetSMSEventHandler(string PhoneNumber)
         //{
