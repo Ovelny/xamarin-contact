@@ -13,6 +13,8 @@
                         <StackLayout.GestureRecognizers>
                             <PanGestureRecognizer PanUpdated="OnPanUpdated" />
                         </StackLayout.GestureRecognizers>
+                        <Button Text="SMS" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
+                        <Button Text="TEL" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
                         <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding FirstName}"></Label>
@@ -20,8 +22,6 @@
                             </StackLayout>
                             <Label Text="{Binding PhoneNumber}"></Label>
                         </StackLayout>
-                        <Button Text="SMS" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
-                        <Button Text="TEL" HorizontalOptions="Fill" Clicked="Button_Clicked"></Button>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

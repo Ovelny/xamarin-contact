@@ -28,10 +28,14 @@ namespace ContactApp.Pages
             
             Contacts = new ObservableCollection<Contact>();
             ContactsView.ItemsSource = Contacts;
-
             this.repositoryContact = new ContactRedoLog();
-            var list = repositoryContact.getAllContacts();
+            RefreshContactList();
+        }
 
+        private void RefreshContactList()
+        {
+            var list = repositoryContact.getAllContacts();
+            Contacts.Clear();
             foreach (Contact contact in list)
                 Contacts.Add(contact);
         }
@@ -50,50 +54,18 @@ namespace ContactApp.Pages
         {
 
         }
-
-        //private View CreateContactElement(Contact contact)
-        //{
-        //    var contactDisplayElement = new StackLayout { Orientation = StackOrientation.Horizontal };
-
-        //    var buttonSMS = new Button { Text = "SMS", HorizontalOptions = LayoutOptions.Fill };
-        //    buttonSMS.Clicked += GetSMSEventHandler(contact.PhoneNumber);
-        //    contactDisplayElement.Children.Add(buttonSMS);
-
-        //    var elem = new StackLayout { Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.FillAndExpand };
-        //    elem.Children.Add(new Label { Text = contact.FirstName + " " + contact.LastName, VerticalOptions = LayoutOptions.Fill });
-        //    elem.Children.Add(new Label { Text = contact.PhoneNumber, VerticalOptions = LayoutOptions.Fill });
-        //    contactDisplayElement.Children.Add(elem);
-
-        //    var buttonTel = new Button { Text = "TEL", HorizontalOptions = LayoutOptions.Fill};
-        //    contactDisplayElement.Children.Add(buttonTel);
-
-        //    var panGesture = new PanGestureRecognizer();
-        //    panGesture.PanUpdated += OnPanUpdated;
-        //    contactDisplayElement.GestureRecognizers.Add(panGesture);
-
-        //    //var deleteButton = new Label { Text = "Suppr" };
-        //    //var modifyButton = new Label { Text = "Modif" };
-
-        //    //var contactElement = new AbsoluteLayout { WidthRequest=360 };
-        //    //contactElement.Children.Add(deleteButton, new Point(0,5));
-        //    //contactElement.Children.Add(modifyButton, new Point(320,5));
-        //    //contactElement.Children.Add(contactDisplayElement, new Point(0,0));
-
-        //    return contactDisplayElement;
-        //}
-
+        
         private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
+            Contact contact = ((StackLayout)sender).BindingContext as Contact;
+
             switch (e.StatusType)
             {
-                case GestureStatus.Started:
-                    //HandleTouchStart();
-                    break;
                 case GestureStatus.Running:
                     HandleTouch((View)sender, (float)e.TotalX);
                     break;
                 case GestureStatus.Completed:
-                    HandleTouchEnd((View)sender);
+                    HandleTouchEnd((View)sender, contact);
                     break;
             }
         }
@@ -104,7 +76,7 @@ namespace ContactApp.Pages
             SwipeDistance = diff_x;
         }
 
-        private async void HandleTouchEnd(View sender)
+        private async void HandleTouchEnd(View sender, Contact contact)
         {
             if (Math.Abs(SwipeDistance) > ReferenceSwipeDistance)
             {
@@ -112,35 +84,42 @@ namespace ContactApp.Pages
                 await sender.TranslateTo(SwipeDistance > 0 ? this.Width : -this.Width, 0);
                 if (SwipeDistance > 0)
                 {
-                    SwipedRight(sender);
+                    await ResetElementPosition(sender);
+                    SwipedRight(contact);
                 }
                 else
                 {
-                    SwipedLeft(sender).ContinueWith(
+                    SwipedLeft(contact).ContinueWith(
                         (a) => ResetElementPosition(sender)
                         );
                 }
             }
             else
             {
-                ResetElementPosition(sender);
+                await ResetElementPosition(sender);
             }
         }
 
-        private async void ResetElementPosition(View element)
+        private async Task ResetElementPosition(View element)
         {
             await element.TranslateTo(-element.X, 0);
             SwipeDistance = 0;
         }
-
-        private void SwipedRight(View sender)
+        
+        /// <summary>
+        /// Supprime le contact
+        /// </summary>
+        private void SwipedRight(Contact contact)
         {
-            // Action de suppression
+            this.repositoryContact.deleteContact(contact.Id);
+            RefreshContactList();
         }
 
-        private Task SwipedLeft(View sender)
+        /// <summary>
+        /// Redirige vers la page de détail contact
+        /// </summary>
+        private Task SwipedLeft(Contact contact)
         {
-            // Action de modification : renvoyer vers la page de modif
             return this.Navigation.PushAsync(new ContactDetail());
         }
 

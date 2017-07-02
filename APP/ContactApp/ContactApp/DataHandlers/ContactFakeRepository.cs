@@ -29,22 +29,45 @@ namespace ContactApp.DataHandlers
                     FirstName = "Rémi",
                     LastName = "Sansfamille",
                     PhoneNumber = "06 12 34 56 78"
+                },new Contact
+                {
+                    Id = 4,
+                    FirstName = "Jeanne",
+                    LastName = "Esserge",
+                    PhoneNumber = "06 12 34 56 78"
+                },new Contact
+                {
+                    Id = 5,
+                    FirstName = "Jean-Paul",
+                    LastName = "Personne",
+                    PhoneNumber = "06 12 34 56 78"
                 }
             };
 
         public void addContact(Contact contact)
         {
-            throw new NotImplementedException();
+            this.contacts.Add(contact);
         }
 
         public void deleteContact(int id)
         {
-            throw new NotImplementedException();
+            var item = contacts.FirstOrDefault(x => x.Id == id);
+            if (item != null)
+                this.contacts.Remove(item);
         }
 
         public void editContact(int id, Contact contact)
         {
-            throw new NotImplementedException();
+            var item = contacts.FirstOrDefault(x => x.Id == id);
+            if (item != null)
+            {
+                item.Address = contact.Address;
+                item.FirstName = contact.FirstName;
+                item.LastName= contact.LastName;
+                item.Mail = contact.Mail;
+                item.PhoneNumber = contact.PhoneNumber;
+                item.Photos = contact.Photos;
+            }
         }
 
         public List<Contact> getAllContacts()
