@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ContactApp.DataHandlers;
+using ContactApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +14,19 @@ namespace ContactApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContactDetail : ContentPage
     {
-        public ContactDetail()
+        private IRepository repositoryContact;
+        public Contact contact { get; set; }
+
+        public ContactDetail(int idContact=-1)
         {
+
+            this.repositoryContact = new ContactRedoLog();
+
+            if (idContact != -1)
+                this.contact = repositoryContact.getContact(idContact);
+            else
+                this.contact = new Contact();
+
             InitializeComponent();
         }
     }

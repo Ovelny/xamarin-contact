@@ -16,7 +16,7 @@ namespace ContactApp.Pages
     {
         // T. : est-ce vraiment nécessaire de devoir gérer des variables avec un swipe normal ?
         private float SwipeDistance = 0;
-        private float ReferenceSwipeDistance = 50;
+        private float ReferenceSwipeDistance = 30;
 
         private IRepository repositoryContact;
 
@@ -120,7 +120,7 @@ namespace ContactApp.Pages
         /// </summary>
         private Task SwipedLeft(Contact contact)
         {
-            return this.Navigation.PushAsync(new ContactDetail());
+            return this.Navigation.PushAsync(new ContactDetail(contact.Id));
         }
 
         //private EventHandler GetSMSEventHandler(string PhoneNumber)
