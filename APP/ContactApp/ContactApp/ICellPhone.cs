@@ -9,5 +9,6 @@ namespace ContactApp
     public interface ICellPhone
     {
         void openSMS(string PhoneNumber);
+        void callContact(string PhoneNumber);
     }
 }

@@ -40,18 +40,17 @@ namespace ContactApp.Pages
                 Contacts.Add(contact);
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void SMSClicked(object sender, EventArgs e)
         {
-            // selon le text label, appelle la méthode correspondante pour gérer appel ou sms
-        }
-
-        private void SMSClicked()
-        {
+            Contact contact = ((Button)sender).BindingContext as Contact;
+            DependencyService.Get<ICellPhone>().openSMS(contact.PhoneNumber);
 
         }
 
-        private void TelClicked()
+        private void TelClicked(object sender, EventArgs e)
         {
+            Contact contact = ((Button)sender).BindingContext as Contact;
+            DependencyService.Get<ICellPhone>().callContact(contact.PhoneNumber);
 
         }
         
