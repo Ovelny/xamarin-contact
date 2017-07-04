@@ -6,6 +6,9 @@
              Title="Détail du contact">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
+            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="placeholder.png" IsVisible="{Binding displayPlaceholder}" />
+            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="{Binding photo}" />
+
             <Label Text="Prénom" />
             <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.FirstName}" />
             <Label Text="Nom" />

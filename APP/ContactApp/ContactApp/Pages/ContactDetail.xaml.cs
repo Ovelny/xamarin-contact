@@ -2,6 +2,7 @@
 using ContactApp.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,16 @@ namespace ContactApp.Pages
         private IRepository repositoryContact;
         public Contact contact { get; set; }
 
+        public ImageSource photo { get; set; }
+
+        public bool displayPlaceholder
+        {
+            get
+            {
+                return contact.Photo == null || contact.Photo == "";
+            }
+        }
+
         public ContactDetail(int idContact=-1)
         {
             this.repositoryContact = new ContactRedoLog();
@@ -25,6 +36,12 @@ namespace ContactApp.Pages
                 this.contact = repositoryContact.getContact(idContact);
             else
                 this.contact = new Contact { Id = -1 };
+
+            if (contact.Photo != null && contact.Photo != "")
+            {
+                Byte[] base64 = System.Convert.FromBase64String(contact.Photo);
+                photo = ImageSource.FromStream(() => new MemoryStream(base64));
+            }
 
             InitializeComponent();
         }
