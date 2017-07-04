@@ -16,6 +16,8 @@
             <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.Mail}" />
             <Label Text="Adresse" />
             <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.Address}" />
+
+            <Button Text="Enregistrer" Clicked="BtnEnregistrer"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

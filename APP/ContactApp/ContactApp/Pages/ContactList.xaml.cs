@@ -44,16 +44,15 @@ namespace ContactApp.Pages
         {
             Contact contact = ((Button)sender).BindingContext as Contact;
             DependencyService.Get<ICellPhone>().openSMS(contact.PhoneNumber);
-
         }
 
         private void TelClicked(object sender, EventArgs e)
         {
             Contact contact = ((Button)sender).BindingContext as Contact;
             DependencyService.Get<ICellPhone>().callContact(contact.PhoneNumber);
-
         }
-        
+
+        #region swipe
         private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
             Contact contact = ((StackLayout)sender).BindingContext as Contact;
@@ -83,7 +82,7 @@ namespace ContactApp.Pages
                 await sender.TranslateTo(SwipeDistance > 0 ? this.Width : -this.Width, 0);
                 if (SwipeDistance > 0)
                 {
-                    await ResetElementPosition(sender);
+                    ResetElementPosition(sender);
                     SwipedRight(contact);
                 }
                 else
@@ -108,10 +107,14 @@ namespace ContactApp.Pages
         /// <summary>
         /// Supprime le contact
         /// </summary>
-        private void SwipedRight(Contact contact)
+        private async void SwipedRight(Contact contact)
         {
-            this.repositoryContact.deleteContact(contact.Id);
-            RefreshContactList();
+            var action = await DisplayActionSheet("Voulez-vous supprimer le contact ?", "Annuler", "Supprimer");
+            if (action == "Supprimer")
+            {
+                this.repositoryContact.deleteContact(contact.Id);
+                RefreshContactList();
+            }
         }
 
         /// <summary>
@@ -121,18 +124,6 @@ namespace ContactApp.Pages
         {
             return this.Navigation.PushAsync(new ContactDetail(contact.Id));
         }
-
-        //private EventHandler GetSMSEventHandler(string PhoneNumber)
-        //{
-        //    // les EventHandler doivent avoir pour paramètres (object sender, EventArgs e)
-        //    // ici on renvoie une fonction de type EventHandler, qui appellera SMS_Clicked avec 
-        //    // le bon paramètre PhoneNumber
-        //    return (sender, e) => SMS_Clicked(PhoneNumber);
-        //}
-
-        //private void SMS_Clicked(string PhoneNumber)
-        //{
-        //    DependencyService.Get<ICellPhone>().openSMS(PhoneNumber);
-        //}
+        #endregion
     }
 }

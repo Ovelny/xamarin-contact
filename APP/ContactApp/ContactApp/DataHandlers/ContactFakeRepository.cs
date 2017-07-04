@@ -9,6 +9,7 @@ namespace ContactApp.DataHandlers
 {
     public class ContactFakeRepository : IRepository
     {
+        private int idAuto = 5;
         private List<Contact> contacts = new List<Contact>
             {
                 new Contact
@@ -46,6 +47,8 @@ namespace ContactApp.DataHandlers
 
         public void addContact(Contact contact)
         {
+            idAuto++;
+            contact.Id = idAuto;
             this.contacts.Add(contact);
         }
 

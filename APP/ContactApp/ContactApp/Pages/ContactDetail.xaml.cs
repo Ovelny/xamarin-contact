@@ -19,15 +19,25 @@ namespace ContactApp.Pages
 
         public ContactDetail(int idContact=-1)
         {
-
             this.repositoryContact = new ContactRedoLog();
 
             if (idContact != -1)
                 this.contact = repositoryContact.getContact(idContact);
             else
-                this.contact = new Contact();
+                this.contact = new Contact { Id = -1 };
 
             InitializeComponent();
+        }
+
+        // NB: ne marche pas vraiment, parce qu'on a des données mockées. 
+        // Ce code n'aura pas besoin d'être modifié lors du passage aux vraies données.
+        private void BtnEnregistrer(object sender, EventArgs e)
+        {
+            if (this.contact.Id == -1)
+                this.repositoryContact.addContact(this.contact);
+            else
+                this.repositoryContact.editContact(contact.Id, contact);
+            DisplayAlert("", "Le contact a été sauvegardé", "Ok");
         }
     }
 }
