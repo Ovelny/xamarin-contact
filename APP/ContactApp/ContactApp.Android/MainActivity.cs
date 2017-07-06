@@ -32,7 +32,7 @@ namespace ContactApp.Droid
         {
             if (resultCode == Result.Ok && requestCode == 1) // code 1 : SelectImageFromGallery
             {
-                var stream = ContentResolver.OpenInputStream(data.Data); 
+                var stream = ContentResolver.OpenInputStream(data.Data);
                 var stack = app.MainPage.Navigation.NavigationStack; 
                 var contactDetailPage = stack[stack.Count - 1] as ContactDetail;
                 if (contactDetailPage != null)

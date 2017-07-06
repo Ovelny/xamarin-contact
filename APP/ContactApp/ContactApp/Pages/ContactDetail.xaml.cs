@@ -1,15 +1,9 @@
-﻿using Android.Content;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
 using Android.Graphics;
 using ContactApp.DataHandlers;
 using ContactApp.Models;
-using Java.IO;
-using Java.Nio;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -19,6 +13,7 @@ namespace ContactApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContactDetail : ContentPage
     {
+        #region members
         private IRepository repositoryContact;
         public Contact contact { get; set; }
 
@@ -31,9 +26,11 @@ namespace ContactApp.Pages
                 return contact.Photo == null || contact.Photo == "";
             }
         }
+        #endregion
 
         public ContactDetail(int idContact=-1)
         {
+            this.BindingContext = this;
             this.repositoryContact = new ContactRedoLog();
 
             if (idContact != -1)
@@ -61,17 +58,19 @@ namespace ContactApp.Pages
             DisplayAlert("", "Le contact a été sauvegardé", "Ok");
         }
 
-        public void ImageTapped(object sender, EventArgs e)
+        public async void ImageTapped(object sender, EventArgs e)
         {
-            DependencyService.Get<ICellPhone>().SelectImageFromGallery();
+            var action = await DisplayActionSheet("Modifier la photo du contact", "Annuler", null, "Sélectionner depuis la galerie");
+            if (action == "Sélectionner depuis la galerie")
+            {
+                DependencyService.Get<ICellPhone>().SelectImageFromGallery();
+            }
         }
 
         public void ImageSelected(Stream stream)
         {
             contact.Photo = GetBase64ImageFromStream(stream);
-
             photo = ImageSource.FromStream(() => stream);
-            InitializeComponent();
         }
 
         public string GetBase64ImageFromStream(Stream stream)

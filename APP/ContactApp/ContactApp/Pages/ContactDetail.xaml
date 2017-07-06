@@ -6,27 +6,27 @@
              Title="Détail du contact">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
-            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="placeholder.png" IsVisible="{Binding displayPlaceholder}">
+            <Image Source="placeholder.png" IsVisible="{Binding displayPlaceholder}">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
                 </Image.GestureRecognizers>
             </Image>
-            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="{Binding photo}">
+            <Image x:Name="ContactPhoto" Source="{Binding photo}">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
                 </Image.GestureRecognizers>
             </Image>
 
             <Label Text="Prénom" />
-            <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.FirstName}" />
+            <Entry Text="{Binding contact.FirstName}" />
             <Label Text="Nom" />
-            <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.LastName}" />
+            <Entry Text="{Binding contact.LastName}" />
             <Label Text="Numéro" />
-            <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.PhoneNumber}" />
+            <Entry Text="{Binding contact.PhoneNumber}" />
             <Label Text="E-mail" />
-            <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.Mail}" />
+            <Entry Text="{Binding contact.Mail}" />
             <Label Text="Adresse" />
-            <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.Address}" />
+            <Entry Text="{Binding contact.Address}" />
 
             <Button Text="Enregistrer" Clicked="BtnEnregistrer"></Button>
         </StackLayout>

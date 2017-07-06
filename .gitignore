@@ -3,6 +3,7 @@
 **/obj/*
 **/bin/*
 *.csproj.user
+*.csproj
 
 */packages/*
 */App_Data
