@@ -6,8 +6,16 @@
              Title="Détail du contact">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
-            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="placeholder.png" IsVisible="{Binding displayPlaceholder}" />
-            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="{Binding photo}" />
+            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="placeholder.png" IsVisible="{Binding displayPlaceholder}">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+            <Image BindingContext="{x:Reference Name=ContactDetail}" Source="{Binding photo}">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
 
             <Label Text="Prénom" />
             <Entry BindingContext="{x:Reference Name=ContactDetail}" Text="{Binding contact.FirstName}" />

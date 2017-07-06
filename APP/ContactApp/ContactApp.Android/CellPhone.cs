@@ -15,20 +15,28 @@ using ContactApp.Droid;
 [assembly: Xamarin.Forms.Dependency(typeof(CellPhone))]
 namespace ContactApp.Droid
 {
-    public class CellPhone : ICellPhone
+    public class CellPhone : Activity, ICellPhone
     {
-        public void openSMS(string PhoneNumber)
+        public void OpenSMS(string PhoneNumber)
         {
             PhoneNumber = PhoneNumber.Replace(" ", "");
             Device.OpenUri(new Uri(String.Format("sms:{0}", PhoneNumber)));
         }
 
-        public void callContact(string PhoneNumber)
+        public void CallContact(string PhoneNumber)
         {
             PhoneNumber = PhoneNumber.Replace(" ", "");
             var intent = new Intent(Intent.ActionDial);
             intent.SetData(Android.Net.Uri.Parse("tel:" + PhoneNumber));
             Forms.Context.StartActivity(intent);
+        }
+
+        public void SelectImageFromGallery()
+        {
+            var imageIntent = new Intent();
+            imageIntent.SetType("image/*");
+            imageIntent.SetAction(Intent.ActionGetContent);
+            ((Activity)Forms.Context).StartActivityForResult(Intent.CreateChooser(imageIntent, "Select photo"), 1);
         }
     }
 }

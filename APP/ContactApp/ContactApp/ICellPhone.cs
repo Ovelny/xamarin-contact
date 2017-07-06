@@ -8,7 +8,8 @@ namespace ContactApp
 {
     public interface ICellPhone
     {
-        void openSMS(string PhoneNumber);
-        void callContact(string PhoneNumber);
+        void OpenSMS(string PhoneNumber);
+        void CallContact(string PhoneNumber);
+        void SelectImageFromGallery();
     }
 }

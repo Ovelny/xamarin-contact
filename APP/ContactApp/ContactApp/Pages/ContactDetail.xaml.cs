@@ -1,5 +1,9 @@
-﻿using ContactApp.DataHandlers;
+﻿using Android.Content;
+using Android.Graphics;
+using ContactApp.DataHandlers;
 using ContactApp.Models;
+using Java.IO;
+using Java.Nio;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,6 +59,32 @@ namespace ContactApp.Pages
             else
                 this.repositoryContact.editContact(contact.Id, contact);
             DisplayAlert("", "Le contact a été sauvegardé", "Ok");
+        }
+
+        public void ImageTapped(object sender, EventArgs e)
+        {
+            DependencyService.Get<ICellPhone>().SelectImageFromGallery();
+        }
+
+        public void ImageSelected(Stream stream)
+        {
+            contact.Photo = GetBase64ImageFromStream(stream);
+
+            photo = ImageSource.FromStream(() => stream);
+            InitializeComponent();
+        }
+
+        public string GetBase64ImageFromStream(Stream stream)
+        {
+            Bitmap bm = BitmapFactory.DecodeStream(stream);
+
+            byte[] bitmapData;
+            using (var st = new MemoryStream())
+            {
+                bm.Compress(Bitmap.CompressFormat.Png, 0, st);
+                bitmapData = st.ToArray();
+            }
+            return System.Convert.ToBase64String(bitmapData);
         }
     }
 }

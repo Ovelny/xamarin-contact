@@ -43,13 +43,13 @@ namespace ContactApp.Pages
         private void SMSClicked(object sender, EventArgs e)
         {
             Contact contact = ((Button)sender).BindingContext as Contact;
-            DependencyService.Get<ICellPhone>().openSMS(contact.PhoneNumber);
+            DependencyService.Get<ICellPhone>().OpenSMS(contact.PhoneNumber);
         }
 
         private void TelClicked(object sender, EventArgs e)
         {
             Contact contact = ((Button)sender).BindingContext as Contact;
-            DependencyService.Get<ICellPhone>().callContact(contact.PhoneNumber);
+            DependencyService.Get<ICellPhone>().CallContact(contact.PhoneNumber);
         }
 
         #region swipe
