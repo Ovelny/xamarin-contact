@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using Android.Graphics;
 using ContactApp.DataHandlers;
@@ -66,38 +65,41 @@ namespace ContactApp.Pages
             DisplayAlert("", "Le contact a été sauvegardé", "Ok");
         }
 
-        public async void ImageTapped(object sender, EventArgs e)
+        public async void ContactPhotoTapped(object sender, EventArgs e)
         {
-            var sel = "Sélectionner depuis la galerie";
-            var del = contactPhotoIsDefined ? "Supprimer l'image du contact" : null;
-            var action = await DisplayActionSheet("Modifier la photo du contact", "Annuler", del, sel);
-            if (action == sel)
+            var optionSelect = "Sélectionner depuis la galerie";
+            var optionSuppr = contactPhotoIsDefined ? "Supprimer l'image du contact" : null;
+            var optionPhoto = "Prendre une photo";
+            var action = await DisplayActionSheet("Modifier la photo du contact", "Annuler", optionSuppr, optionSelect, optionPhoto);
+            if (action == optionSelect)
             {
                 DependencyService.Get<ICellPhone>().SelectImageFromGallery();
             }
-            else if (action == del)
+            else if (action == optionSuppr)
             {
                 contact.Photo = null;
                 UpdateDisplayedPhoto();
             }
+            else if (action == optionPhoto)
+            {
+                DependencyService.Get<ICellPhone>().TakePicture();
+            }
         }
-
-        public void ImageSelected(Stream stream)
+        
+        public void UpdatePhoto(Bitmap bitmap)
         {
-            byte[] bitmapData = GetImageByteArrayFromStream(stream);
+            byte[] bitmapData = GetByteArrayFromBitmap(bitmap);
             contact.Photo = System.Convert.ToBase64String(bitmapData);
             photo = ImageSource.FromStream(() => new MemoryStream(bitmapData));
             InitializeComponent();
         }
 
-        public byte[] GetImageByteArrayFromStream(Stream stream)
+        public byte[] GetByteArrayFromBitmap(Bitmap bitmap)
         {
-            Bitmap bm = BitmapFactory.DecodeStream(stream);
-
             byte[] bitmapData;
             using (var st = new MemoryStream())
             {
-                bm.Compress(Bitmap.CompressFormat.Png, 0, st);
+                bitmap.Compress(Bitmap.CompressFormat.Png, 0, st);
                 bitmapData = st.ToArray();
             }
             return bitmapData;

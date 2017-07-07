@@ -2,12 +2,10 @@
 
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
 using Android.Content;
 using ContactApp.Pages;
+using Android.Graphics;
 
 namespace ContactApp.Droid
 {
@@ -30,15 +28,28 @@ namespace ContactApp.Droid
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            if (resultCode == Result.Ok && requestCode == 1) // code 1 : SelectImageFromGallery
+            if (resultCode != Result.Ok)
+                return;
+            if (requestCode == 1 || requestCode == 2)
             {
-                var stream = ContentResolver.OpenInputStream(data.Data);
-                var stack = app.MainPage.Navigation.NavigationStack; 
+                Bitmap imageBitmap = null;
+                if (requestCode == 1) // code 1 : SelectImageFromGallery
+                {
+                    var stream = ContentResolver.OpenInputStream(data.Data);
+                    BitmapFactory.Options options = new BitmapFactory.Options { InSampleSize = 8 }; // réduire la taille de l'image
+                    imageBitmap = BitmapFactory.DecodeStream(stream, new Rect(), options);
+                }
+                else if (requestCode == 2) // code 2 : TakePicture
+                {
+                    imageBitmap = (Bitmap)data.Extras.Get("data");
+                }
+                var stack = app.MainPage.Navigation.NavigationStack;
                 var contactDetailPage = stack[stack.Count - 1] as ContactDetail;
                 if (contactDetailPage != null)
-                    contactDetailPage.ImageSelected(stream);
+                    contactDetailPage.UpdatePhoto(imageBitmap);
                 else
-                    throw new Exception("Page détail contact non trouvée pour l'appel à ImageSelected");
+                    throw new Exception("Page détail contact non trouvée pour l'appel à UpdatePhoto");
+                imageBitmap.Dispose();
             }
         }
     }

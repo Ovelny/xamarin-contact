@@ -11,5 +11,6 @@ namespace ContactApp
         void OpenSMS(string PhoneNumber);
         void CallContact(string PhoneNumber);
         void SelectImageFromGallery();
+        void TakePicture();
     }
 }

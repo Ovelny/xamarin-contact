@@ -8,7 +8,7 @@
         <StackLayout Orientation="Vertical">
             <Image x:Name="ContactPhoto" Source="{Binding photo}" HeightRequest="100">
                 <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
+                    <TapGestureRecognizer Tapped="ContactPhotoTapped"></TapGestureRecognizer>
                 </Image.GestureRecognizers>
             </Image>
 
