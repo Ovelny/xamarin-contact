@@ -6,12 +6,7 @@
              Title="Détail du contact">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
-            <Image Source="placeholder.png" IsVisible="{Binding displayPlaceholder}">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
-                </Image.GestureRecognizers>
-            </Image>
-            <Image x:Name="ContactPhoto" Source="{Binding photo}">
+            <Image x:Name="ContactPhoto" Source="{Binding photo}" HeightRequest="100">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ImageTapped"></TapGestureRecognizer>
                 </Image.GestureRecognizers>

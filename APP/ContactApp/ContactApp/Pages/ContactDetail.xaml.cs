@@ -19,11 +19,11 @@ namespace ContactApp.Pages
 
         public ImageSource photo { get; set; }
 
-        public bool displayPlaceholder
+        public bool contactPhotoIsDefined
         {
             get
             {
-                return contact.Photo == null || contact.Photo == "";
+                return contact.Photo != null && contact.Photo != "";
             }
         }
         #endregion
@@ -37,13 +37,21 @@ namespace ContactApp.Pages
                 this.contact = repositoryContact.getContact(idContact);
             else
                 this.contact = new Contact { Id = -1 };
+            
+            UpdateDisplayedPhoto();
+        }
 
-            if (contact.Photo != null && contact.Photo != "")
+        public void UpdateDisplayedPhoto()
+        {
+            if (contactPhotoIsDefined)
             {
                 Byte[] base64 = System.Convert.FromBase64String(contact.Photo);
                 photo = ImageSource.FromStream(() => new MemoryStream(base64));
             }
-
+            else
+            {
+                photo = ImageSource.FromFile("placeholder.png");
+            }
             InitializeComponent();
         }
 
@@ -60,20 +68,29 @@ namespace ContactApp.Pages
 
         public async void ImageTapped(object sender, EventArgs e)
         {
-            var action = await DisplayActionSheet("Modifier la photo du contact", "Annuler", null, "Sélectionner depuis la galerie");
-            if (action == "Sélectionner depuis la galerie")
+            var sel = "Sélectionner depuis la galerie";
+            var del = contactPhotoIsDefined ? "Supprimer l'image du contact" : null;
+            var action = await DisplayActionSheet("Modifier la photo du contact", "Annuler", del, sel);
+            if (action == sel)
             {
                 DependencyService.Get<ICellPhone>().SelectImageFromGallery();
+            }
+            else if (action == del)
+            {
+                contact.Photo = null;
+                UpdateDisplayedPhoto();
             }
         }
 
         public void ImageSelected(Stream stream)
         {
-            contact.Photo = GetBase64ImageFromStream(stream);
-            photo = ImageSource.FromStream(() => stream);
+            byte[] bitmapData = GetImageByteArrayFromStream(stream);
+            contact.Photo = System.Convert.ToBase64String(bitmapData);
+            photo = ImageSource.FromStream(() => new MemoryStream(bitmapData));
+            InitializeComponent();
         }
 
-        public string GetBase64ImageFromStream(Stream stream)
+        public byte[] GetImageByteArrayFromStream(Stream stream)
         {
             Bitmap bm = BitmapFactory.DecodeStream(stream);
 
@@ -83,7 +100,7 @@ namespace ContactApp.Pages
                 bm.Compress(Bitmap.CompressFormat.Png, 0, st);
                 bitmapData = st.ToArray();
             }
-            return System.Convert.ToBase64String(bitmapData);
+            return bitmapData;
         }
     }
 }
