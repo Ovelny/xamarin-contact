@@ -40,11 +40,12 @@ namespace ContactApp.Droid
                 Bitmap imageBitmap = null;
                 if (requestCode == 1) // code 1 : SelectImageFromGallery
                 {
-                    //int orientation = GetImageOrientationFromUri(data.Data);
-
                     var stream = ContentResolver.OpenInputStream(data.Data);
                     BitmapFactory.Options options = new BitmapFactory.Options { InSampleSize = 8 }; // réduire la taille de l'image
                     imageBitmap = BitmapFactory.DecodeStream(stream, new Rect(), options);
+                    int orientation = GetImageOrientationFromUri(data.Data);
+                    if(orientation != 0)
+                        imageBitmap = rotateImage(imageBitmap, orientation);
                 }
                 else if (requestCode == 2) // code 2 : TakePicture
                 {
@@ -68,7 +69,7 @@ namespace ContactApp.Droid
         {
             // Get the id from the uri
             int index = imageUri.Path.LastIndexOf(":"); // paths are like "documents/image:1234"
-            string imageId = imageUri.Path.Substring(index);
+            string imageId = imageUri.Path.Substring(index+1);
 
             // Query the image storage for our image
             string[] imageColumns = { MediaStore.Images.Media.InterfaceConsts.Id, MediaStore.Images.ImageColumns.Orientation };
@@ -86,6 +87,13 @@ namespace ContactApp.Droid
             {
                 return 0;
             }
+        }
+
+        private Bitmap rotateImage(Bitmap sourceBitmap, int degrees)
+        {
+            Matrix matrix = new Matrix();
+            matrix.PostRotate(degrees);
+            return Bitmap.CreateBitmap(sourceBitmap, 0, 0, sourceBitmap.Width, sourceBitmap.Height, matrix, true);
         }
     }
 }
