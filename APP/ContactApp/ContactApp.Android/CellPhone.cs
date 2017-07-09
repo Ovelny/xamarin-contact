@@ -32,7 +32,7 @@ namespace ContactApp.Droid
             var imageIntent = new Intent();
             imageIntent.SetType("image/*");
             imageIntent.SetAction(Intent.ActionGetContent);
-            ((Activity)Forms.Context).StartActivityForResult(Intent.CreateChooser(imageIntent, "Select photo"), 1);
+            ((Activity)Forms.Context).StartActivityForResult(Intent.CreateChooser(imageIntent, "Choisir une photo"), 1);
         }
 
         public void TakePicture()
