@@ -73,7 +73,6 @@ namespace ContactApp.Droid
 
             // Query the image storage for our image
             string[] imageColumns = { MediaStore.Images.Media.InterfaceConsts.Id, MediaStore.Images.ImageColumns.Orientation };
-            //string imageOrderBy = MediaStore.Images.Media.InterfaceConsts.Id + " DESC";
             string where = MediaStore.Images.Media.InterfaceConsts.Id + " = ?";
             ICursor cursor = ContentResolver.Query(MediaStore.Images.Media.ExternalContentUri, imageColumns, where, new string[] { imageId }, null);
 
