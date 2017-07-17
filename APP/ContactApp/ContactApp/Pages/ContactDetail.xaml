@@ -2,10 +2,30 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ContactApp.Pages.ContactDetail"
+             x:Name="ContactDetail"
              Title="Détail du contact">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Détail du contact" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <Image x:Name="ContactPhoto" Source="{Binding photo}" HeightRequest="100">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ContactPhotoTapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Label Text="Prénom" />
+                <Entry Text="{Binding contact.FirstName}" />
+                <Label Text="Nom" />
+                <Entry Text="{Binding contact.LastName}" />
+                <Label Text="Numéro" />
+                <Entry Text="{Binding contact.PhoneNumber}" />
+                <Label Text="E-mail" />
+                <Entry Text="{Binding contact.Mail}" />
+                <Label Text="Adresse" />
+                <Entry Text="{Binding contact.Address}" />
+
+                <Button Text="Enregistrer" Clicked="BtnEnregistrer"></Button>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
