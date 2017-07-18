@@ -18,7 +18,8 @@ namespace ContactApp.DataHandlers
 
         public ContactRestRepository()
         {
-            client.BaseAddress = new Uri("http://192.168.43.215:64342/api/contacts");
+            var URL = Config.GetBaseURL();
+            client.BaseAddress = new Uri(URL);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.Timeout = TimeSpan.FromMinutes(3);
@@ -47,13 +48,21 @@ namespace ContactApp.DataHandlers
 
         public async Task<List<Contact>> getAllContacts()
         {
-            List<Contact> list = new List<Contact>();
-            HttpResponseMessage response = await client.GetAsync("");
-            if (response.IsSuccessStatusCode)
+                List<Contact> list = new List<Contact>();
+            try
             {
-                list = await response.Content.ReadAsAsync<List<Contact>>();
+                HttpResponseMessage response = await client.GetAsync("");
+                if (response.IsSuccessStatusCode)
+                {
+                    list = await response.Content.ReadAsAsync<List<Contact>>();
+                }
             }
-            return list;
+
+            catch (Exception e)
+            {
+                
+            }
+                return list;
         }
 
         public async Task<Contact> getContact(int id)
