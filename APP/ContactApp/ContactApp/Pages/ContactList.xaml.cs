@@ -27,9 +27,9 @@ namespace ContactApp.Pages
             RefreshContactList();
         }
 
-        private void RefreshContactList()
+        private async void RefreshContactList()
         {
-            var list = repositoryContact.getAllContacts();
+            var list = await repositoryContact.getAllContacts();
             Contacts.Clear();
             foreach (Contact contact in list)
                 Contacts.Add(contact);

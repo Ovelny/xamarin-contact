@@ -9,8 +9,8 @@ namespace ContactApp.DataHandlers
 {
     public interface IRepository
     {
-        List<Contact> getAllContacts();
-        Contact getContact(int id);
+        Task<List<Contact>> getAllContacts();
+        Task<Contact> getContact(int id);
         void addContact(Contact contact);
         void editContact(int id, Contact contact);
         void deleteContact(int id);

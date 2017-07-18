@@ -75,14 +75,14 @@ namespace ContactApp.DataHandlers
             }
         }
 
-        public List<Contact> getAllContacts()
+        public Task<List<Contact>> getAllContacts()
         {
-            return contacts;
+            return new Task<List<Contact>>(() => { return contacts; });
         }
 
-        public Contact getContact(int id)
+        public Task<Contact> getContact(int id)
         {
-            return contacts.FirstOrDefault(c => c.Id == id);
+            return new Task<Contact>(() => { return contacts.FirstOrDefault(c => c.Id == id); });
         }
     }
 }

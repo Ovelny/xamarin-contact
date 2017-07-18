@@ -31,12 +31,16 @@ namespace ContactApp.Pages
         {
             this.BindingContext = this;
             this.repositoryContact = new ContactRedoLog();
+            InitContact(idContact);
+        }
 
+        public async void InitContact(int idContact)
+        {
             if (idContact != -1)
-                this.contact = repositoryContact.getContact(idContact);
+                this.contact = await repositoryContact.getContact(idContact);
             else
                 this.contact = new Contact { Id = -1 };
-            
+
             UpdateDisplayedPhoto();
         }
 

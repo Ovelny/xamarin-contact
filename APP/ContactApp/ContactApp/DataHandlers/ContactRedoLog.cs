@@ -14,37 +14,38 @@ namespace ContactApp.DataHandlers
     /// </summary>
     public class ContactRedoLog : IRepository
     {
-        private ContactRestRepository RestRepository;
-        private ContactFakeRepository FakeRepository;
+        //private ContactRestRepository Repository;
+        private ContactFakeRepository Repository;
 
         public ContactRedoLog()
         {
-            FakeRepository = new ContactFakeRepository();
+            Repository = new ContactFakeRepository();
+            //Repository = new ContactRestRepository();
         }
 
         public void addContact(Contact contact)
         {
-            FakeRepository.addContact(contact);
+            Repository.addContact(contact);
         }
 
         public void deleteContact(int id)
         {
-            FakeRepository.deleteContact(id);
+            Repository.deleteContact(id);
         }
 
         public void editContact(int id, Contact contact)
         {
-            FakeRepository.editContact(id, contact);
+            Repository.editContact(id, contact);
         }
 
-        public List<Contact> getAllContacts()
+        public Task<List<Contact>> getAllContacts()
         {
-            return FakeRepository.getAllContacts();
+            return Repository.getAllContacts();
         }
 
-        public Contact getContact(int id)
+        public Task<Contact> getContact(int id)
         {
-            return FakeRepository.getContact(id);
+            return Repository.getContact(id);
         }
     }
 }
