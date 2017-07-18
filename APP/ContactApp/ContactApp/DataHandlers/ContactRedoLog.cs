@@ -14,13 +14,13 @@ namespace ContactApp.DataHandlers
     /// </summary>
     public class ContactRedoLog : IRepository
     {
-        //private ContactRestRepository Repository;
-        private ContactFakeRepository Repository;
+        private ContactRestRepository Repository;
+        //private ContactFakeRepository Repository;
 
         public ContactRedoLog()
         {
-            Repository = new ContactFakeRepository();
-            //Repository = new ContactRestRepository();
+            //Repository = new ContactFakeRepository();
+            Repository = new ContactRestRepository();
         }
 
         public void addContact(Contact contact)

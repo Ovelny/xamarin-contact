@@ -22,7 +22,7 @@ namespace ContactApp.Pages
         {
             get
             {
-                return contact.Photo != null && contact.Photo != "";
+                return contact != null && contact.Photo != null && contact.Photo != "";
             }
         }
         #endregion

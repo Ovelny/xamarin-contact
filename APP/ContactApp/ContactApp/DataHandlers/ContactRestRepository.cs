@@ -19,20 +19,25 @@ namespace ContactApp.DataHandlers
         public ContactRestRepository()
         {
             client.BaseAddress = new Uri("http://192.168.43.215:64342/api/contacts");
-            //client.BaseAddress = new Uri("http://localhost:64342/api/contacts");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.Timeout = TimeSpan.FromMinutes(3);
         }
 
-        public void addContact(Contact contact)
+        public async void addContact(Contact contact)
         {
             throw new NotImplementedException();
+            //HttpResponseMessage response = await client.PostAsJsonAsync("", contact);
+            //response.EnsureSuccessStatusCode();
+
+            //// Return the URI of the created resource.
+            //var i = response.Headers.Location;
         }
 
         public void deleteContact(int id)
         {
             throw new NotImplementedException();
+            //client.DeleteAsync($"/{id}");
         }
 
         public void editContact(int id, Contact contact)
@@ -42,25 +47,13 @@ namespace ContactApp.DataHandlers
 
         public async Task<List<Contact>> getAllContacts()
         {
-                //Contact contact = new Contact { Address = "aa", LastName = "bb", Mail = "cc", FirstName = "dd" };
-                //HttpResponseMessage res = await client.PostAsJsonAsync("", contact);
-                //res.EnsureSuccessStatusCode();
-            //return null;
-            try
+            List<Contact> list = new List<Contact>();
+            HttpResponseMessage response = await client.GetAsync("");
+            if (response.IsSuccessStatusCode)
             {
-                List<Contact> list = new List<Contact>();
-                HttpResponseMessage response = await client.GetAsync("");
-                if (response.IsSuccessStatusCode)
-                {
-                    list = await response.Content.ReadAsAsync<List<Contact>>();
-                }
-                return list;
-
-            }catch(Exception e)
-            {
-
+                list = await response.Content.ReadAsAsync<List<Contact>>();
             }
-            return null;
+            return list;
         }
 
         public async Task<Contact> getContact(int id)
