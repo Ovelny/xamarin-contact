@@ -47,6 +47,11 @@ namespace ContactApp.Pages
             DependencyService.Get<ICellPhone>().CallContact(contact.PhoneNumber);
         }
 
+        private void NewContactClicked(object sender, EventArgs e)
+        {
+            this.Navigation.PushAsync(new ContactDetail());
+        }
+
         #region swipe
         private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {

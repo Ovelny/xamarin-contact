@@ -4,28 +4,31 @@
              xmlns:local="clr-namespace:ContactApp"
              x:Class="ContactApp.Pages.ContactList"
              Title="Liste des contacts">
-        
-    <ListView x:Name="ContactsView">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout x:Name="ContactElement" Orientation="Horizontal">
-                        <StackLayout.GestureRecognizers>
-                            <PanGestureRecognizer PanUpdated="OnPanUpdated" />
-                        </StackLayout.GestureRecognizers>
-                        <Button Text="SMS" HorizontalOptions="Fill" Clicked="SMSClicked" CommandParameter="{Binding PhoneNumber}"></Button>
-                        <Button Text="TEL" HorizontalOptions="Fill" Clicked="TelClicked" CommandParameter="{Binding PhoneNumber}"></Button>
-                        <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding FirstName}"></Label>
-                                <Label Text="{Binding LastName}"></Label>
+
+    <StackLayout>
+        <ListView x:Name="ContactsView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout x:Name="ContactElement" Orientation="Horizontal">
+                            <StackLayout.GestureRecognizers>
+                                <PanGestureRecognizer PanUpdated="OnPanUpdated" />
+                            </StackLayout.GestureRecognizers>
+                            <Button Text="SMS" HorizontalOptions="Fill" Clicked="SMSClicked" CommandParameter="{Binding PhoneNumber}"></Button>
+                            <Button Text="TEL" HorizontalOptions="Fill" Clicked="TelClicked" CommandParameter="{Binding PhoneNumber}"></Button>
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding FirstName}"></Label>
+                                    <Label Text="{Binding LastName}"></Label>
+                                </StackLayout>
+                                <Label Text="{Binding PhoneNumber}"></Label>
                             </StackLayout>
-                            <Label Text="{Binding PhoneNumber}"></Label>
                         </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
-    
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Text="Ajouter un contact" Clicked="NewContactClicked"/>
+    </StackLayout>
+
 </ContentPage>
