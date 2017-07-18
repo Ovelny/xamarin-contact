@@ -36,10 +36,11 @@ namespace ContactApp.Pages
 
         public async void InitContact(int idContact)
         {
+            contact = null;
             if (idContact != -1)
-                this.contact = await repositoryContact.getContact(idContact);
-            else
-                this.contact = new Contact { Id = -1 };
+                contact = await repositoryContact.getContact(idContact);
+            if (contact == null)
+                contact = new Contact { Id = -1 };
 
             UpdateDisplayedPhoto();
         }

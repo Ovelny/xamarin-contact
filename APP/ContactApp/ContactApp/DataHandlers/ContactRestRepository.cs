@@ -18,11 +18,9 @@ namespace ContactApp.DataHandlers
 
         public ContactRestRepository()
         {
-            var URL = Config.GetBaseURL();
-            client.BaseAddress = new Uri(URL);
+            client.BaseAddress = new Uri(Config.GetBaseURL());
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.Timeout = TimeSpan.FromMinutes(3);
         }
 
         public async void addContact(Contact contact)
@@ -48,27 +46,19 @@ namespace ContactApp.DataHandlers
 
         public async Task<List<Contact>> getAllContacts()
         {
-                List<Contact> list = new List<Contact>();
-            try
+            List<Contact> list = new List<Contact>();
+            HttpResponseMessage response = await client.GetAsync("contacts");
+            if (response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response = await client.GetAsync("");
-                if (response.IsSuccessStatusCode)
-                {
-                    list = await response.Content.ReadAsAsync<List<Contact>>();
-                }
+                list = await response.Content.ReadAsAsync<List<Contact>>();
             }
-
-            catch (Exception e)
-            {
-                
-            }
-                return list;
+            return list;
         }
 
         public async Task<Contact> getContact(int id)
         {
             Contact contact = null;
-            HttpResponseMessage response = await client.GetAsync("/"+id.ToString());
+            HttpResponseMessage response = await client.GetAsync("contacts/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {
                 contact = await response.Content.ReadAsAsync<Contact>();

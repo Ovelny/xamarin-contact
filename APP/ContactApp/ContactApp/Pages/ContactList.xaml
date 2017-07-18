@@ -14,8 +14,8 @@
                             <StackLayout.GestureRecognizers>
                                 <PanGestureRecognizer PanUpdated="OnPanUpdated" />
                             </StackLayout.GestureRecognizers>
-                            <Button Text="SMS" HorizontalOptions="Fill" Clicked="SMSClicked" CommandParameter="{Binding PhoneNumber}"></Button>
-                            <Button Text="TEL" HorizontalOptions="Fill" Clicked="TelClicked" CommandParameter="{Binding PhoneNumber}"></Button>
+                            <Button Text="SMS" HorizontalOptions="Fill" Clicked="SMSClicked"></Button>
+                            <Button Text="TEL" HorizontalOptions="Fill" Clicked="TelClicked"></Button>
                             <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="{Binding FirstName}"></Label>
