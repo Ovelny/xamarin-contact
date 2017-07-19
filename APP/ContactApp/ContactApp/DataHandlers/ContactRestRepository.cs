@@ -24,29 +24,23 @@ namespace ContactApp.DataHandlers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task addContact(Contact contact)
+        public async Task<int> addContact(Contact contact)
         {
-            try
+            var content = new StringContent(JsonConvert.SerializeObject(contact), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("contacts", content);
+            if (response.IsSuccessStatusCode == false)
             {
-                contact.Id = 0;
-                var content = new StringContent(JsonConvert.SerializeObject(contact));
-                HttpResponseMessage response = await client.PostAsync("contacts", content);
-                //response.EnsureSuccessStatusCode();
-                if (response.IsSuccessStatusCode)
-                {
-                    // Return the URI of the created resource.
-                    var i = response.Headers.Location;
-                }
+                throw new Exception("Erreur lors de l'enregistrement");
             }
-            catch (Exception e)
+            else
             {
-
+                var savedContact = await response.Content.ReadAsAsync<Contact>();
+                return savedContact.Id;
             }
         }
 
         public async Task deleteContact(int id)
         {
-            //throw new NotImplementedException();
             await client.DeleteAsync($"contacts/{id}");
         }
 

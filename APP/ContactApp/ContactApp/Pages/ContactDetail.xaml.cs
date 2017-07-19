@@ -14,6 +14,7 @@ namespace ContactApp.Pages
     {
         #region members
         private IRepository repositoryContact;
+        private ContactList ParentPage { get; set; }
         public Contact contact { get; set; }
 
         public ImageSource photo { get; set; }
@@ -27,8 +28,9 @@ namespace ContactApp.Pages
         }
         #endregion
 
-        public ContactDetail(int idContact=-1)
+        public ContactDetail(ContactList parent, int idContact=-1)
         {
+            this.ParentPage = parent;
             this.BindingContext = this;
             this.repositoryContact = new ContactRedoLog();
             InitContact(idContact);
@@ -59,24 +61,31 @@ namespace ContactApp.Pages
             InitializeComponent();
         }
 
-        // NB: ne marche pas vraiment, parce qu'on a des données mockées. 
-        // Ce code n'aura pas besoin d'être modifié lors du passage aux vraies données.
-        private void BtnEnregistrer(object sender, EventArgs e)
+        private async void BtnEnregistrer(object sender, EventArgs e)
         {
             if (contact.Photos == null)
                 contact.Photos = "";
             try
             {
                 if (this.contact.Id == -1)
-                    this.repositoryContact.addContact(this.contact);
+                {
+                    var newId = await this.repositoryContact.addContact(this.contact);
+                    contact.Id = newId;
+                }
                 else
-                    this.repositoryContact.editContact(contact.Id, contact);
+                    await this.repositoryContact.editContact(contact.Id, contact);
                 DisplayAlert("", "Le contact a été sauvegardé", "Ok");
+                FireContactSavedEvent();
             }
             catch (Exception ex)
             {
                 DisplayAlert("", "Une erreur est survenue", "Ok");
             }
+        }
+
+        public void FireContactSavedEvent()
+        {
+            this.ParentPage.OnContactSaved();
         }
 
         public async void ContactPhotoTapped(object sender, EventArgs e)
@@ -102,6 +111,12 @@ namespace ContactApp.Pages
         
         public void UpdatePhoto(Bitmap bitmap)
         {
+            if (bitmap == null)
+            {
+                contact.Photos = "";
+                photo = null;
+                return;
+            }
             byte[] bitmapData = GetByteArrayFromBitmap(bitmap);
             contact.Photos = System.Convert.ToBase64String(bitmapData);
             photo = ImageSource.FromStream(() => new MemoryStream(bitmapData));

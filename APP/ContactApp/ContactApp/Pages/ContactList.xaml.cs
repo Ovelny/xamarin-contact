@@ -9,7 +9,6 @@ namespace ContactApp.Pages
 {
     public partial class ContactList : ContentPage
     {
-        // T. : est-ce vraiment nécessaire de devoir gérer des variables avec un swipe normal ?
         private float SwipeDistance = 0;
         private float ReferenceSwipeDistance = 30;
 
@@ -20,10 +19,15 @@ namespace ContactApp.Pages
         public ContactList()
         {
             InitializeComponent();
-            
+
             Contacts = new ObservableCollection<Contact>();
             ContactsView.ItemsSource = Contacts;
             this.repositoryContact = new ContactRedoLog();
+            RefreshContactList();
+        }
+
+        public void OnContactSaved()
+        {
             RefreshContactList();
         }
 
@@ -49,7 +53,7 @@ namespace ContactApp.Pages
 
         private void NewContactClicked(object sender, EventArgs e)
         {
-            this.Navigation.PushAsync(new ContactDetail());
+            this.Navigation.PushAsync(new ContactDetail(this));
         }
 
         #region swipe
@@ -87,12 +91,8 @@ namespace ContactApp.Pages
                 }
                 else
                 {
-                    //SwipedLeft(contact).ContinueWith(
-                    //    (a) => ResetElementPosition(sender)
-                    //    );
                     await SwipedLeft(contact);
                     await ResetElementPosition(sender);
-                    RefreshContactList();
                 }
             }
             else
@@ -125,7 +125,7 @@ namespace ContactApp.Pages
         /// </summary>
         private Task SwipedLeft(Contact contact)
         {
-            return this.Navigation.PushAsync(new ContactDetail(contact.Id));
+            return this.Navigation.PushAsync(new ContactDetail(this, contact.Id));
         }
         #endregion
     }

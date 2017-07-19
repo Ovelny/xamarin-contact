@@ -23,7 +23,7 @@ namespace ContactApp.DataHandlers
             Repository = new ContactRestRepository();
         }
 
-        public Task addContact(Contact contact)
+        public Task<int> addContact(Contact contact)
         {
             return Repository.addContact(contact);
         }
