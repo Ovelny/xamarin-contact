@@ -115,8 +115,15 @@ namespace ContactApp.Pages
             var action = await DisplayActionSheet("Voulez-vous supprimer le contact ?", "Annuler", "Supprimer");
             if (action == "Supprimer")
             {
-                await this.repositoryContact.deleteContact(contact.Id);
-                RefreshContactList();
+                try
+                {
+                    await this.repositoryContact.deleteContact(contact.Id);
+                    RefreshContactList();
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("", "Une erreur est survenue", "Ok");
+                }
             }
         }
 

@@ -41,7 +41,11 @@ namespace ContactApp.DataHandlers
 
         public async Task deleteContact(int id)
         {
-            await client.DeleteAsync($"contacts/{id}");
+            HttpResponseMessage response = await client.DeleteAsync($"contacts/{id}");
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new Exception("Erreur lors de la suppression");
+            }
         }
 
         public async Task editContact(int id, Contact contact)

@@ -63,8 +63,6 @@ namespace ContactApp.Pages
 
         private async void BtnEnregistrer(object sender, EventArgs e)
         {
-            if (contact.Photos == null)
-                contact.Photos = "";
             try
             {
                 if (this.contact.Id == -1)

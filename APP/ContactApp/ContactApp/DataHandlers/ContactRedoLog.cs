@@ -10,7 +10,6 @@ namespace ContactApp.DataHandlers
     /// <summary>
     /// Servira à gérer le mode hors-ligne en appelant le repo REST ou la db locale
     /// en fonction du réseau
-    /// Pour l'instant : données mockées.
     /// </summary>
     public class ContactRedoLog : IRepository
     {
