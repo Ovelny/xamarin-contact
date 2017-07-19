@@ -23,19 +23,19 @@ namespace ContactApp.DataHandlers
             Repository = new ContactRestRepository();
         }
 
-        public void addContact(Contact contact)
+        public Task addContact(Contact contact)
         {
-            Repository.addContact(contact);
+            return Repository.addContact(contact);
         }
 
-        public void deleteContact(int id)
+        public Task deleteContact(int id)
         {
-            Repository.deleteContact(id);
+            return Repository.deleteContact(id);
         }
 
-        public void editContact(int id, Contact contact)
+        public Task editContact(int id, Contact contact)
         {
-            Repository.editContact(id, contact);
+            return Repository.editContact(id, contact);
         }
 
         public Task<List<Contact>> getAllContacts()

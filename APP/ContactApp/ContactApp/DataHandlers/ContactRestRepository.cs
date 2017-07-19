@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ContactApp.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace ContactApp.DataHandlers
 {
@@ -23,25 +24,40 @@ namespace ContactApp.DataHandlers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async void addContact(Contact contact)
+        public async Task addContact(Contact contact)
         {
-            throw new NotImplementedException();
-            //HttpResponseMessage response = await client.PostAsJsonAsync("", contact);
-            //response.EnsureSuccessStatusCode();
+            try
+            {
+                contact.Id = 0;
+                var content = new StringContent(JsonConvert.SerializeObject(contact));
+                HttpResponseMessage response = await client.PostAsync("contacts", content);
+                //response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    // Return the URI of the created resource.
+                    var i = response.Headers.Location;
+                }
+            }
+            catch (Exception e)
+            {
 
-            //// Return the URI of the created resource.
-            //var i = response.Headers.Location;
+            }
         }
 
-        public void deleteContact(int id)
+        public async Task deleteContact(int id)
         {
-            throw new NotImplementedException();
-            //client.DeleteAsync($"/{id}");
+            //throw new NotImplementedException();
+            await client.DeleteAsync($"contacts/{id}");
         }
 
-        public void editContact(int id, Contact contact)
+        public async Task editContact(int id, Contact contact)
         {
-            throw new NotImplementedException();
+            var content = new StringContent(JsonConvert.SerializeObject(contact), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PutAsync($"contacts/{id}", content);
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new Exception("Erreur lors de l'enregistrement");
+            }
         }
 
         public async Task<List<Contact>> getAllContacts()
@@ -58,7 +74,7 @@ namespace ContactApp.DataHandlers
         public async Task<Contact> getContact(int id)
         {
             Contact contact = null;
-            HttpResponseMessage response = await client.GetAsync("contacts/" + id.ToString());
+            HttpResponseMessage response = await client.GetAsync($"contacts/{id}");
             if (response.IsSuccessStatusCode)
             {
                 contact = await response.Content.ReadAsAsync<Contact>();

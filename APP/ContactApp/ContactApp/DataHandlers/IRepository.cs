@@ -11,8 +11,8 @@ namespace ContactApp.DataHandlers
     {
         Task<List<Contact>> getAllContacts();
         Task<Contact> getContact(int id);
-        void addContact(Contact contact);
-        void editContact(int id, Contact contact);
-        void deleteContact(int id);
+        Task addContact(Contact contact);
+        Task editContact(int id, Contact contact);
+        Task deleteContact(int id);
     }
 }

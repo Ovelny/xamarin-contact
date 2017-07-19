@@ -22,7 +22,7 @@ namespace ContactApp.Pages
         {
             get
             {
-                return contact != null && contact.Photo != null && contact.Photo != "";
+                return contact != null && contact.Photos != null && contact.Photos != "";
             }
         }
         #endregion
@@ -49,7 +49,7 @@ namespace ContactApp.Pages
         {
             if (contactPhotoIsDefined)
             {
-                Byte[] base64 = System.Convert.FromBase64String(contact.Photo);
+                Byte[] base64 = System.Convert.FromBase64String(contact.Photos);
                 photo = ImageSource.FromStream(() => new MemoryStream(base64));
             }
             else
@@ -63,11 +63,20 @@ namespace ContactApp.Pages
         // Ce code n'aura pas besoin d'être modifié lors du passage aux vraies données.
         private void BtnEnregistrer(object sender, EventArgs e)
         {
-            if (this.contact.Id == -1)
-                this.repositoryContact.addContact(this.contact);
-            else
-                this.repositoryContact.editContact(contact.Id, contact);
-            DisplayAlert("", "Le contact a été sauvegardé", "Ok");
+            if (contact.Photos == null)
+                contact.Photos = "";
+            try
+            {
+                if (this.contact.Id == -1)
+                    this.repositoryContact.addContact(this.contact);
+                else
+                    this.repositoryContact.editContact(contact.Id, contact);
+                DisplayAlert("", "Le contact a été sauvegardé", "Ok");
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("", "Une erreur est survenue", "Ok");
+            }
         }
 
         public async void ContactPhotoTapped(object sender, EventArgs e)
@@ -82,7 +91,7 @@ namespace ContactApp.Pages
             }
             else if (action == optionSuppr)
             {
-                contact.Photo = null;
+                contact.Photos = "";
                 UpdateDisplayedPhoto();
             }
             else if (action == optionPhoto)
@@ -94,7 +103,7 @@ namespace ContactApp.Pages
         public void UpdatePhoto(Bitmap bitmap)
         {
             byte[] bitmapData = GetByteArrayFromBitmap(bitmap);
-            contact.Photo = System.Convert.ToBase64String(bitmapData);
+            contact.Photos = System.Convert.ToBase64String(bitmapData);
             photo = ImageSource.FromStream(() => new MemoryStream(bitmapData));
             InitializeComponent();
         }

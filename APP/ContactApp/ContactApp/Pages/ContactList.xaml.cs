@@ -87,9 +87,12 @@ namespace ContactApp.Pages
                 }
                 else
                 {
-                    SwipedLeft(contact).ContinueWith(
-                        (a) => ResetElementPosition(sender)
-                        );
+                    //SwipedLeft(contact).ContinueWith(
+                    //    (a) => ResetElementPosition(sender)
+                    //    );
+                    await SwipedLeft(contact);
+                    await ResetElementPosition(sender);
+                    RefreshContactList();
                 }
             }
             else
@@ -112,7 +115,7 @@ namespace ContactApp.Pages
             var action = await DisplayActionSheet("Voulez-vous supprimer le contact ?", "Annuler", "Supprimer");
             if (action == "Supprimer")
             {
-                this.repositoryContact.deleteContact(contact.Id);
+                await this.repositoryContact.deleteContact(contact.Id);
                 RefreshContactList();
             }
         }
